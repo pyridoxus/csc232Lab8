@@ -37,12 +37,12 @@ namespace DataFileReader
 		in.open( dataFileName, ios::in | ios::binary );
 		if (in.is_open())
 		{
-		  cout << "File " << dataFileName << " successfully opened." << endl;
+//		  cout << "File " << dataFileName << " successfully opened." << endl;
 		  for(int a = 0; a < 4; a ++)
 		  {
 				in.getline(temp, 256);
 				header[a].append(temp);
-				cout << header[a] << header[a].length() << endl;
+//				cout << header[a] << header[a].length() << endl;
 		  }
 		  if(this->getDimensions(header))
 		  {
@@ -97,8 +97,8 @@ namespace DataFileReader
 			this->geometry[i] < this->minG ? this->minG = this->geometry[i] : 0;
 			this->geometry[i] > this->maxG ? this->maxG = this->geometry[i] : 0;
 		}
-		cout << "Min: " << this->minG << endl;
-		cout << "Max: " << this->maxG << endl;
+//		cout << "Min: " << this->minG << endl;
+//		cout << "Max: " << this->maxG << endl;
 		//(inVal – inMin) / (inMax – inMin) = (outVal – outMin) / (outMax – outMin)
 		return;
 	}
@@ -135,14 +135,14 @@ namespace DataFileReader
 			}
 			in.close();
 		}
-		cout.precision(6);
-		for(unsigned int d = 0; d < this->colors.size(); d++)
-		{
-			cout << this->colors[d].r << " ";
-			cout << this->colors[d].g << " ";
-			cout << this->colors[d].b << " ";
-			cout << this->colors[d].a << " " << endl;
-		}
+//		cout.precision(6);
+//		for(unsigned int d = 0; d < this->colors.size(); d++)
+//		{
+//			cout << this->colors[d].r << " ";
+//			cout << this->colors[d].g << " ";
+//			cout << this->colors[d].b << " ";
+//			cout << this->colors[d].a << " " << endl;
+//		}
 		return;
 	}
 
