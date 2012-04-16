@@ -12,17 +12,24 @@
 #include <iostream>
 #include <stdlib.h>
 #include <float.h>
-
-using namespace std;
+#include <vector>
 
 namespace DataFileReader
 {
 
+	struct Color
+	{
+			float r;
+			float g;
+			float b;
+			float a;
+	};
+
 	class DataReader
 	{
 		public:
-			DataReader(string fileName);
-			DataReader(char *fileName);
+			DataReader(std::string dataFileName, std::string colorFileName);
+			DataReader(char *dataFileName, char *colorFileName);
 			virtual ~DataReader();
 
 		private:
@@ -31,8 +38,10 @@ namespace DataFileReader
 			long int geoSize;			// Size of geometry array
 			float minG, maxG;			// Geometry extremes
 			float *geometry;	// Array of geometry from file
-			void constructor(const char *fileName);
-			bool getDimensions(string *header);	// Return false if not proper format
+			std::vector<Color> colors;
+			void dataConstructor(const char *dataFileName);
+			void colorConstructor(const char *colorFileName);
+			bool getDimensions(std::string *header);	// Return false if not proper format
 			void buildInterpolate(void);				// Build the interpolation table
 	};
 

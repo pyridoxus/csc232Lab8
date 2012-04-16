@@ -7,17 +7,19 @@
 
 
 #include "lab8.h"
-using namespace DataFileReader;
 
 int main( int argc, char *argv[] )
 {
 	DataReader *dr;
 	char temp[256];
-	string fileName(getcwd(temp, 255));
-	fileName.append("/data/Elevation.bin");
+	string dataFileName(getcwd(temp, 255));
+	string colorFileName(getcwd(temp, 255));
+	dataFileName.append("/data/Elevation.bin");
+	colorFileName.append("/data/livingston.pal");
 
-	cout << fileName << endl;
-	dr = new DataReader(fileName);
+	cout << dataFileName << endl;
+	cout << colorFileName << endl;
+	dr = new DataReader(dataFileName, colorFileName);
 	free(dr);
 	return 0;
 }

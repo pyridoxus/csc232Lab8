@@ -6,18 +6,21 @@
  */
 
 #include "DataReader.h"
+using namespace std;
 
 namespace DataFileReader
 {
 
-	DataReader::DataReader(string fileName)
+	DataReader::DataReader(string dataFileName, string colorFileName)
 	{
-		constructor(fileName.c_str());
+		dataConstructor(dataFileName.c_str());
+		colorConstructor(colorFileName.c_str());
 	}
 
-	DataReader::DataReader(char *fileName)
+	DataReader::DataReader(char *dataFileName, char *colorFileName)
 	{
-		constructor(fileName);
+		dataConstructor(dataFileName);
+		colorConstructor(colorFileName);
 	}
 
 	DataReader::~DataReader()
@@ -25,17 +28,16 @@ namespace DataFileReader
 		free(this->geometry);
 	}
 
-	void DataReader::constructor(const char *fileName)
+	void DataReader::dataConstructor(const char *dataFileName)
 	{
 		fstream in;
 		char temp[256];
 		string header[4];
-		int i = 0;
 		this->dSize = this->dx = this->dy = this->dz = 0;
-		in.open( fileName, ios::in | ios::binary );
+		in.open( dataFileName, ios::in | ios::binary );
 		if (in.is_open())
 		{
-		  cout << "File " << fileName << " successfully opened." << endl;
+		  cout << "File " << dataFileName << " successfully opened." << endl;
 		  for(int a = 0; a < 4; a ++)
 		  {
 				in.getline(temp, 256);
@@ -51,7 +53,7 @@ namespace DataFileReader
 		}
 		else
 		{
-		  cout << "Error opening file " << fileName << endl;
+		  cout << "Error opening file " << dataFileName << endl;
 		}
 	}
 
@@ -100,4 +102,48 @@ namespace DataFileReader
 		//(inVal – inMin) / (inMax – inMin) = (outVal – outMin) / (outMax – outMin)
 		return;
 	}
+
+	void DataReader::colorConstructor(const char *colorFileName)
+	{
+		fstream in;
+		char temp[256];
+		string s;
+		string t[4];
+		unsigned int i, loc, prevLoc;
+		DataFileReader::Color c;
+		in.open( colorFileName, ios::in | ios::binary );
+		if(in.is_open())
+		{
+			while(!in.eof())
+			{
+				in.getline(temp, 256);
+				s.assign(temp);
+				i = prevLoc = 0;
+				loc = s.find_first_of(" ");
+				while((loc != string::npos) && (i < 4))
+				{
+					t[i] = s.substr(prevLoc, loc - prevLoc);
+					prevLoc = loc + 1;
+					loc = s.find_first_of(" ", prevLoc);
+					i++;
+				}
+				c.r = atof(t[0].c_str());
+				c.g = atof(t[1].c_str());
+				c.b = atof(t[2].c_str());
+				c.a = atof(t[3].c_str());
+				this->colors.push_back(c);
+			}
+			in.close();
+		}
+		cout.precision(6);
+		for(unsigned int d = 0; d < this->colors.size(); d++)
+		{
+			cout << this->colors[d].r << " ";
+			cout << this->colors[d].g << " ";
+			cout << this->colors[d].b << " ";
+			cout << this->colors[d].a << " " << endl;
+		}
+		return;
+	}
+
 } /* namespace DataFileReader */
