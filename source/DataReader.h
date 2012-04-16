@@ -10,6 +10,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -24,7 +25,12 @@ namespace DataFileReader
 			virtual ~DataReader();
 
 		private:
+			unsigned int dx, dy, dz;		// Dimensions of data file
+			unsigned int dSize;				// Size of data element
+			long int geoSize;			// Size of geometry array
+			float *geometry;	// Array of geometry from file
 			void constructor(const char *fileName);
+			bool getDimensions(string *header);	// Return false if not proper format
 	};
 
 } /* namespace DataFileReader */

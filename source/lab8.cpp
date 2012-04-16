@@ -12,8 +12,11 @@ using namespace DataFileReader;
 int main( int argc, char *argv[] )
 {
 	DataReader *dr;
-	char fileName[] = "../data/buckyballs.bin";
+	char temp[256];
+	string fileName(getcwd(temp, 255));
+	fileName.append("/data/BuckyBall.bin");
 
+	cout << fileName << endl;
 	dr = new DataReader(fileName);
 	return 0;
 }
