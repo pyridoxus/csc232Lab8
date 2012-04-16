@@ -44,17 +44,9 @@ namespace DataFileReader
 		  }
 		  if(this->getDimensions(header))
 		  {
-		  	if(this->dSize == sizeof(float))
-		  	{
-		  		this->geometry = (float *)malloc(this->geoSize);
-					in.read((char *)this->geometry, this->geoSize);
-					for(i = 0; i < this->geoSize >> 2; i++)
-					{
-						cout << "Item: " << i << " = " << geometry[i] << endl;
-					}
-		  	}
-		  	else cout << "Data is not the size of a float" << endl;
-		  }
+				this->geometry = (float *)malloc(this->geoSize);
+				in.read((char *)this->geometry, this->geoSize);
+				buildInterpolate();		  }
 			in.close();
 		}
 		else
@@ -92,5 +84,20 @@ namespace DataFileReader
 		}
 		else return false;
 		return true;
+	}
+
+	void DataReader::buildInterpolate(void)
+	{
+		this->maxG = FLT_MIN;
+		this->minG = FLT_MAX;
+		for(int i = 0; i < this->geoSize >> 2; i++)
+		{
+			this->geometry[i] < this->minG ? this->minG = this->geometry[i] : 0;
+			this->geometry[i] > this->maxG ? this->maxG = this->geometry[i] : 0;
+		}
+		cout << "Min: " << this->minG << endl;
+		cout << "Max: " << this->maxG << endl;
+		//(inVal – inMin) / (inMax – inMin) = (outVal – outMin) / (outMax – outMin)
+		return;
 	}
 } /* namespace DataFileReader */

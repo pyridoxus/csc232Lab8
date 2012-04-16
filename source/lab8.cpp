@@ -14,10 +14,11 @@ int main( int argc, char *argv[] )
 	DataReader *dr;
 	char temp[256];
 	string fileName(getcwd(temp, 255));
-	fileName.append("/data/BuckyBall.bin");
+	fileName.append("/data/Elevation.bin");
 
 	cout << fileName << endl;
 	dr = new DataReader(fileName);
+	free(dr);
 	return 0;
 }
 

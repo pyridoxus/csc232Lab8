@@ -11,6 +11,7 @@
 #include <fstream>
 #include <iostream>
 #include <stdlib.h>
+#include <float.h>
 
 using namespace std;
 
@@ -28,9 +29,11 @@ namespace DataFileReader
 			unsigned int dx, dy, dz;		// Dimensions of data file
 			unsigned int dSize;				// Size of data element
 			long int geoSize;			// Size of geometry array
+			float minG, maxG;			// Geometry extremes
 			float *geometry;	// Array of geometry from file
 			void constructor(const char *fileName);
 			bool getDimensions(string *header);	// Return false if not proper format
+			void buildInterpolate(void);				// Build the interpolation table
 	};
 
 } /* namespace DataFileReader */
