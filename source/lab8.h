@@ -8,4 +8,5 @@ using namespace DataFileReader;
 
 #define MAX_STR                   256
 
+GLubyte *buildTexture(DataReader *dr);
 #endif

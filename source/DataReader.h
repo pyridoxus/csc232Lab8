@@ -43,6 +43,12 @@ namespace DataFileReader
 			void colorConstructor(const char *colorFileName);
 			bool getDimensions(std::string *header);	// Return false if not proper format
 			void buildInterpolate(void);				// Build the interpolation table
+			unsigned int getX(void);
+			unsigned int getY(void);
+			unsigned int getZ(void);
+			unsigned int getDataSize(void);
+			long int getGeoSize(void);
+			Color getColor(unsigned int i);		// Get color structure from data
 	};
 
 } /* namespace DataFileReader */

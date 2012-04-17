@@ -12,6 +12,7 @@ int main( int argc, char *argv[] )
 {
 	DataReader *dr;
 	char temp[256];
+	GLubyte *texels;
 	string dataFileName(getcwd(temp, 255));
 	string colorFileName(getcwd(temp, 255));
 	dataFileName.append("/data/Elevation.bin");
@@ -20,8 +21,34 @@ int main( int argc, char *argv[] )
 //	cout << dataFileName << endl;
 //	cout << colorFileName << endl;
 	dr = new DataReader(dataFileName, colorFileName);
+	texels = buildTexture(dr);	// texels allocated here
+
+	free(texels);
 	free(dr);
 	return 0;
+}
+
+GLubyte *buildTexture(DataReader *dr)
+{
+	int i, j;
+	GLubyte *texels = new GLubyte[ dr->getGeoSize() ];
+
+	// For each data value
+	for( j = 0, i = 0; i < dr->getGeoSize(); ++i, j+=4 )
+		{
+			// Convert data range to unsigned bytes (0 to 255)
+			GLubyte c = GLubyte( data[i] * 255.0 );
+			c = c < 0 ? 0 : c;
+			c = c > 255 ? 255 : c;
+
+			// Assign data in r,g,b texture memory (alpha constant)
+			texels[j+0] = GLubyte( c );
+			texels[j+1] = GLubyte( c );
+			texels[j+2] = GLubyte( c );
+			texels[j+3] = 255;
+		}
+
+	return texels;
 }
 
 //// 2D Data sampling with GLSL
@@ -49,23 +76,6 @@ int main( int argc, char *argv[] )
 //
 //  // Allocate memory for 2D texture
 //  //   size of data * 4 for r,g,b,a components
-//  GLubyte *texels = new GLubyte[ size*4 ];
-//
-//  // For each data value
-//  for( j = 0, i = 0; i < size; ++i, j+=4 )
-//    {
-//      // Convert data range to unsigned bytes (0 to 255)
-//      GLubyte c = GLubyte( data[i] * 255.0 );
-//      c = c < 0 ? 0 : c;
-//      c = c > 255 ? 255 : c;
-//
-//      // Assign data in r,g,b texture memory (alpha constant)
-//      texels[j+0] = GLubyte( c );
-//      texels[j+1] = GLubyte( c );
-//      texels[j+2] = GLubyte( c );
-//      texels[j+3] = 255;
-//    }
-//
 //  // Initialize window system
 //  glutInit( &argc, argv );
 //  glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH );

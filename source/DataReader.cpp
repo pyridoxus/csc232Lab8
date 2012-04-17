@@ -146,4 +146,13 @@ namespace DataFileReader
 		return;
 	}
 
+	unsigned int DataReader::getX(void) { return this->dx; }
+	unsigned int DataReader::getY(void) { return this->dy; }
+	unsigned int DataReader::getZ(void) { return this->dz; }
+	unsigned int DataReader::getDataSize(void)  { return this->dSize; }
+	long int DataReader::getGeoSize(void) { return this->geoSize; }
+	Color DataReader::getColor(unsigned int i)
+	{
+		return this->colors[9];
+	}
 } /* namespace DataFileReader */
