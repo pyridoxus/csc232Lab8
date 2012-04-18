@@ -34,6 +34,7 @@ namespace DataFileReader
 		char temp[256];
 		string header[4];
 		this->dSize = this->dx = this->dy = this->dz = 0;
+		this->scale = 255;
 		in.open( dataFileName, ios::in | ios::binary );
 		if (in.is_open())
 		{
@@ -151,8 +152,11 @@ namespace DataFileReader
 	unsigned int DataReader::getZ(void) { return this->dz; }
 	unsigned int DataReader::getDataSize(void)  { return this->dSize; }
 	long int DataReader::getGeoSize(void) { return this->geoSize; }
-	Color DataReader::getColor(unsigned int i)
+	Color DataReader::at(unsigned int i)
 	{
-		return this->colors[9];
+		int c = (int)(this->geometry[i] * this->scale);
+		c = c < 0 ? 0 : c;
+		c = c > 255 ? 255 : c;
+		return this->colors[c];
 	}
 } /* namespace DataFileReader */
