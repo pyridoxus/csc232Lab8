@@ -7,7 +7,17 @@ using namespace DataFileReader;
 #include "GLSL.h"
 
 #define MAX_STR                   256
-
+GLuint texName;                   // texture name
+GLuint shaderProgram1;            // shader program handle
+GLint TexUnit = 0;                // texture unit shader attribute
+GLint TexUnitLocation;            // texture unit shader attribute location
 GLubyte *texels;
-GLubyte *buildTexture(DataReader *dr);
+DataReader *dr;
+
+GLubyte *buildTexture();
+// Callback function
+void myDraw(void);
+
+void setup(int argc, char *argv[]);
+
 #endif

@@ -10,7 +10,6 @@
 
 int main( int argc, char *argv[] )
 {
-	DataReader *dr;
 	char temp[256];
 	string dataFileName(getcwd(temp, 255));
 	string colorFileName(getcwd(temp, 255));
@@ -22,14 +21,15 @@ int main( int argc, char *argv[] )
 	cout << "Setting up data reader" << endl;
 	dr = new DataReader(dataFileName, colorFileName);
 	cout << "Building texture" << endl;
-	texels = buildTexture(dr);	// texels allocated here
+	texels = buildTexture();	// texels allocated here
 	cout << "Everything appears to work" << endl;
+	setup(argc, argv);
 	free(texels);
 	free(dr);
 	return 0;
 }
 
-GLubyte *buildTexture(DataReader *dr)
+GLubyte *buildTexture(void)
 {
 	unsigned int i, j;
 	Color c;
@@ -49,16 +49,62 @@ GLubyte *buildTexture(DataReader *dr)
 	return texels;
 }
 
+void setup(int argc, char *argv[])
+{
+	char temp[256];
+	string vertFileName(getcwd(temp, 255));
+	string fragFileName(getcwd(temp, 255));
+	vertFileName.append("/source/sample2d.vert");
+	fragFileName.append("/source/sample2d.frag");
+
+	glutInit( &argc, argv );
+	glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH );
+	glutInitWindowSize( 400, 300 );
+	glutCreateWindow( "Craig McCulloch's Lab 8" );
+
+	// Resolves which OpenGL extensions are supported by hardware
+	if( glewInit() != GLEW_OK )    {
+		cerr << "Error reported by glewInit" << endl;
+		exit(1);
+	}
+
+	// Orthographic projection
+	glMatrixMode( GL_PROJECTION );
+	glLoadIdentity();
+	gluOrtho2D( 0.0, float(dr->getX()-1), 0.0, float(dr->getY()-1) );
+	glMatrixMode( GL_MODELVIEW );
+	glLoadIdentity();
+
+	// Specify 2D RGBA texture
+	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+	glGenTextures( 1, &texName );
+	glBindTexture( GL_TEXTURE_2D, texName );
+	glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, dr->getX(), dr->getY(), 0, GL_RGBA,
+			GL_UNSIGNED_BYTE, texels );
+
+	// Create shader program
+	shaderProgram1 = CreateProgram( vertFileName.c_str(), fragFileName.c_str() );
+
+	// Locate address of shader sampler variable
+	TexUnitLocation = glGetUniformLocation( shaderProgram1, "TexUnit" );
+
+	// Assign sampler variable value texture unit 0
+	glUniform1i( TexUnitLocation, TexUnit );
+
+	// Callbacks
+	glutDisplayFunc( myDraw );
+
+	// Main loop
+	glutMainLoop();
+
+}
 //// 2D Data sampling with GLSL
 //int dims[2];                      // data dimensions
-//GLuint texName;                   // texture name
-//GLuint shaderProgram1;            // shader program handle
-//GLint TexUnit = 0;                // texture unit shader attribute
-//GLint TexUnitLocation;            // texture unit shader attribute location
 //
 //
-//// Callback function
-//void myDraw();
 //
 //void main( int argc, char **argv )
 //{
@@ -75,6 +121,8 @@ GLubyte *buildTexture(DataReader *dr)
 //  // Allocate memory for 2D texture
 //  //   size of data * 4 for r,g,b,a components
 //  // Initialize window system
+
+
 //  glutInit( &argc, argv );
 //  glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH );
 //  glutInitWindowSize( 400, 300 );
@@ -101,10 +149,8 @@ GLubyte *buildTexture(DataReader *dr)
 //  glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 //  glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 //  glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, dims[0], dims[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, texels );
-//
-//  // Free texture memory
-//  delete[] texels;
-//
+
+
 //  // Create shader program
 //  shaderProgram1 = CreateProgram( "sample2d.vert", "sample2d.frag" );
 //
@@ -122,30 +168,30 @@ GLubyte *buildTexture(DataReader *dr)
 //}
 //
 //// Display callback
-//void myDraw()
-//{
-//  // Clear the screen
-//  glClearColor( 0.0, 0.0, 0.0, 1.0);
-//  glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-//
-//  // Apply shader program
-//  glUseProgram( shaderProgram1 );
-//
-//  // Draw polygon with data dimensions
-//  glBegin( GL_POLYGON );
-//  glTexCoord3f( 0.0, 0.0, 0.0 );
-//  glVertex3f( 0.0, 0.0, 0.0 );
-//  glTexCoord3f( 1.0, 0.0, 0.0 );
-//  glVertex3f( dims[0]-1, 0.0, 0.0 );
-//  glTexCoord3f( 1.0, 1.0, 0.0 );
-//  glVertex3f( dims[0]-1, dims[1]-1, 0.0 );
-//  glTexCoord3f( 0.0, 1.0, 0.0 );
-//  glVertex3f( 0.0, dims[1]-1, 0.0 );
-//  glEnd();
-//
-//  // Swap buffers
-//  glutSwapBuffers();
-//}
+void myDraw(void)
+{
+  // Clear the screen
+  glClearColor( 0.0, 0.0, 0.0, 1.0);
+  glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+  // Apply shader program
+  glUseProgram( shaderProgram1 );
+
+  // Draw polygon with data dimensions
+  glBegin( GL_POLYGON );
+  glTexCoord3f( 0.0, 0.0, 0.0 );
+  glVertex3f( 0.0, 0.0, 0.0 );
+  glTexCoord3f( 1.0, 0.0, 0.0 );
+  glVertex3f( dr->getX()-1, 0.0, 0.0 );
+  glTexCoord3f( 1.0, 1.0, 0.0 );
+  glVertex3f( dr->getX()-1, dr->getY()-1, 0.0 );
+  glTexCoord3f( 0.0, 1.0, 0.0 );
+  glVertex3f( 0.0, dr->getY()-1, 0.0 );
+  glEnd();
+
+  // Swap buffers
+  glutSwapBuffers();
+}
 //
 //
 //sample2d.vert
