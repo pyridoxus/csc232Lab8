@@ -1,3 +1,4 @@
+uniform sampler2D TexUnit;
 void main()
 {
        // Texel color
