@@ -98,10 +98,10 @@ namespace DataFileReader
 		{
 			this->geometry[i] < this->minG ? this->minG = this->geometry[i] : 0;
 			this->geometry[i] > this->maxG ? this->maxG = this->geometry[i] : 0;
-			cout << "geometry[" << i << "]" << this->geometry[i] << endl;
+//			cout << "geometry[" << i << "]" << this->geometry[i] << endl;
 		}
-		cout << "Min: " << this->minG << endl;
-		cout << "Max: " << this->maxG << endl;
+//		cout << "Min: " << this->minG << endl;
+//		cout << "Max: " << this->maxG << endl;
 		//(inVal – inMin) / (inMax – inMin) = (outVal – outMin) / (outMax – outMin)
 		return;
 	}

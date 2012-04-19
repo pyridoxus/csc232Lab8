@@ -18,11 +18,11 @@ int main( int argc, char *argv[] )
 
 //	cout << dataFileName << endl;
 //	cout << colorFileName << endl;
-	cout << "Setting up data reader" << endl;
+//	cout << "Setting up data reader" << endl;
 	dr = new DataReader(dataFileName, colorFileName);
-	cout << "Building texture" << endl;
+//	cout << "Building texture" << endl;
 	texels = buildTexture();	// texels allocated here
-	cout << "Everything appears to work" << endl;
+//	cout << "Everything appears to work" << endl;
 	setup(argc, argv);
 	free(texels);
 	free(dr);
@@ -103,73 +103,8 @@ void setup(int argc, char *argv[])
 	glutMainLoop();
 
 }
-//// 2D Data sampling with GLSL
-//int dims[2];                      // data dimensions
-//
-//
-//
-//void main( int argc, char **argv )
-//{
-//  // Two-dimensional dataset (checkerboard pattern)
-//  dims[0] = 64;
-//  dims[1] = 64;
-//  int size = dims[0] * dims[1];
-//  float *data = new float[ size ];
-//  register int i,j,k;
-//  for( k = 0, i = 0; i < dims[0]; i++ )
-//    for( j = 0; j < dims[1]; j++, ++k )
-//       data[k] = float((((i&0x8)==0)^((j&0x8)==0)));
-//
-//  // Allocate memory for 2D texture
-//  //   size of data * 4 for r,g,b,a components
-//  // Initialize window system
 
-
-//  glutInit( &argc, argv );
-//  glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH );
-//  glutInitWindowSize( 400, 300 );
-//  glutCreateWindow( "Sample 2d" );
-//
-//  // Resolves which OpenGL extensions are supported by hardware
-//  if( glewInit() != GLEW_OK )    {
-//    cerr << "Error reported by glewInit" << endl;
-//    exit(1);
-//  }
-//
-//  // Orthographic projection
-//  glMatrixMode( GL_PROJECTION );
-//  glLoadIdentity();
-//  gluOrtho2D( 0.0, float(dims[0]-1), 0.0, float(dims[1]-1) );
-//  glMatrixMode( GL_MODELVIEW );
-//  glLoadIdentity();
-//
-//  // Specify 2D RGBA texture
-//  glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-//  glGenTextures( 1, &texName );
-//  glBindTexture( GL_TEXTURE_2D, texName );
-//  glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
-//  glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-//  glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-//  glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, dims[0], dims[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, texels );
-
-
-//  // Create shader program
-//  shaderProgram1 = CreateProgram( "sample2d.vert", "sample2d.frag" );
-//
-//  // Locate address of shader sampler variable
-//  TexUnitLocation = glGetUniformLocation( shaderProgram1, "TexUnit" );
-//
-//  // Assign sampler variable value texture unit 0
-//  glUniform1i( TexUnitLocation, TexUnit );
-//
-//  // Callbacks
-//  glutDisplayFunc( myDraw );
-//
-//  // Main loop
-//  glutMainLoop();
-//}
-//
-//// Display callback
+// Display callback
 void myDraw(void)
 {
   // Clear the screen
@@ -197,26 +132,3 @@ void myDraw(void)
   // Swap buffers
   glutSwapBuffers();
 }
-//
-//
-//sample2d.vert
-//void main()
-//{
-//       // Output texture coordinates
-//       gl_TexCoord[0]  = gl_MultiTexCoord0;
-//
-//       // Position in clip space
-//       gl_Position   = gl_ModelViewProjectionMatrix * gl_Vertex;
-//}
-//
-//sample2d.frag
-//uniform sampler2D TexUnit;
-//
-//void main()
-//{
-//       // Texel color
-//       vec3 tColor = vec3(texture2D( TexUnit, vec2(gl_TexCoord[0].st) ).rgb);
-//
-//       // Result
-//       gl_FragColor = vec4( tColor, 1.0 );
-//}
