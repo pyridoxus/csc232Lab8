@@ -1,10 +1,3 @@
-/*
- * DataReader.cpp
- *
- *  Created on: Apr 15, 2012
- *      Author: pyridoxus
- */
-
 #include "DataReader.h"
 using namespace std;
 

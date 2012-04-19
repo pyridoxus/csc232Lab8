@@ -1,10 +1,3 @@
-/*
- * DataReader.h
- *
- *  Created on: Apr 15, 2012
- *      Author: pyridoxus
- */
-
 #ifndef DATAREADER_H_
 #define DATAREADER_H_
 #include <string>

@@ -10,14 +10,19 @@
 
 int main( int argc, char *argv[] )
 {
-	char temp[256];
-	string dataFileName(getcwd(temp, 255));
-	string colorFileName(getcwd(temp, 255));
-	dataFileName.append("/data/Elevation.bin");
-	colorFileName.append("/data/rainbow.pal");
+// Put the file paths back to a flatter system because I do not know if
+// Windows will barf at the forward slashes and I do not have time to make this
+// code check which OS it's using.
+//	char temp[256];
+//	string dataFileName(getcwd(temp, 255));
+//	string colorFileName(getcwd(temp, 255));
+//	dataFileName.append("Elevation.bin");
+//	colorFileName.append("rainbow.pal");
 
-//	cout << dataFileName << endl;
-//	cout << colorFileName << endl;
+	string  dataFileName("Elevation.bin");
+	string  colorFileName("rainbow.pal");
+	cout << "Data file: " << dataFileName << endl;
+	cout << "Color file: " << colorFileName << endl;
 //	cout << "Setting up data reader" << endl;
 	dr = new DataReader(dataFileName, colorFileName);
 //	cout << "Building texture" << endl;
@@ -41,9 +46,9 @@ GLubyte *buildTexture(void)
 		{
 			c = dr->at(i);
 			// Assign data in r,g,b texture memory
-			texels[j+0] = (GLubyte)(c.r * 256);
-			texels[j+1] = (GLubyte)(c.g * 256);
-			texels[j+2] = (GLubyte)(c.b * 256);
+			texels[j+0] = (GLubyte)(c.r * 255);
+			texels[j+1] = (GLubyte)(c.g * 255);
+			texels[j+2] = (GLubyte)(c.b * 255);
 			texels[j+3] = 255;
 //			cout << c.r << ", " << c.g << ", " << c.b << ", " << c.a << endl;
 		}
@@ -53,11 +58,16 @@ GLubyte *buildTexture(void)
 
 void setup(int argc, char *argv[])
 {
-	char temp[256];
-	string vertFileName(getcwd(temp, 255));
-	string fragFileName(getcwd(temp, 255));
-	vertFileName.append("/source/sample2d.vert");
-	fragFileName.append("/source/sample2d.frag");
+// Put the file paths back to a flatter system because I do not know if
+// Windows will barf at the forward slashes and I do not have time to make this
+// code check which OS it's using.
+//	char temp[256];
+//	string vertFileName(getcwd(temp, 255));
+//	string fragFileName(getcwd(temp, 255));
+//	vertFileName.append("/source/sample2d.vert");
+//	fragFileName.append("/source/sample2d.frag");
+	string vertFileName("sample2d.vert");
+	string fragFileName("sample2d.frag");
 
 	glutInit( &argc, argv );
 	glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH );
