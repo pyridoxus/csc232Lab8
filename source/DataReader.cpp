@@ -49,7 +49,8 @@ namespace DataFileReader
 		  {
 				this->geometry = (float *)malloc(this->geoSize);
 				in.read((char *)this->geometry, this->geoSize);
-				buildInterpolate();		  }
+				buildInterpolate();
+		  }
 			in.close();
 		}
 		else
@@ -97,9 +98,10 @@ namespace DataFileReader
 		{
 			this->geometry[i] < this->minG ? this->minG = this->geometry[i] : 0;
 			this->geometry[i] > this->maxG ? this->maxG = this->geometry[i] : 0;
+			cout << "geometry[" << i << "]" << this->geometry[i] << endl;
 		}
-//		cout << "Min: " << this->minG << endl;
-//		cout << "Max: " << this->maxG << endl;
+		cout << "Min: " << this->minG << endl;
+		cout << "Max: " << this->maxG << endl;
 		//(inVal – inMin) / (inMax – inMin) = (outVal – outMin) / (outMax – outMin)
 		return;
 	}
@@ -154,9 +156,12 @@ namespace DataFileReader
 	long int DataReader::getGeoSize(void) { return this->geoSize; }
 	Color DataReader::at(unsigned int i)
 	{
-		int c = (int)(this->geometry[i] * this->scale);
+		int c = (int)((this->geometry[i] - this->minG) * this->scale / \
+					(this->maxG - this->minG));
 		c = c < 0 ? 0 : c;
 		c = c > 255 ? 255 : c;
+//		cout << "dr.at(" << i << ") = " << c << endl;
 		return this->colors[c];
+//		return this->colors[128];
 	}
 } /* namespace DataFileReader */

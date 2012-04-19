@@ -14,7 +14,7 @@ int main( int argc, char *argv[] )
 	string dataFileName(getcwd(temp, 255));
 	string colorFileName(getcwd(temp, 255));
 	dataFileName.append("/data/Elevation.bin");
-	colorFileName.append("/data/livingston.pal");
+	colorFileName.append("/data/rainbow.pal");
 
 //	cout << dataFileName << endl;
 //	cout << colorFileName << endl;
@@ -35,15 +35,17 @@ GLubyte *buildTexture(void)
 	Color c;
 	texels = new GLubyte[ dr->getGeoSize() ];	// texels is global
 
+	cout.precision(6);
 	// For each data value
 	for( j = 0, i = 0; i < dr->getGeoSize() >> 2; ++i, j+=4 )
 		{
 			c = dr->at(i);
 			// Assign data in r,g,b texture memory
-			texels[j+0] = c.r;
-			texels[j+1] = c.g;
-			texels[j+2] = c.b;
-			texels[j+3] = c.a;
+			texels[j+0] = (GLubyte)(c.r * 256);
+			texels[j+1] = (GLubyte)(c.g * 256);
+			texels[j+2] = (GLubyte)(c.b * 256);
+			texels[j+3] = 255;
+//			cout << c.r << ", " << c.g << ", " << c.b << ", " << c.a << endl;
 		}
 
 	return texels;
@@ -177,6 +179,9 @@ void myDraw(void)
   // Apply shader program
   glUseProgram( shaderProgram1 );
 
+//  glColor3f(1.0, 0.5, 0.25);
+//  cout << dr->getX() << endl;
+//  cout << dr->getY() << endl;
   // Draw polygon with data dimensions
   glBegin( GL_POLYGON );
   glTexCoord3f( 0.0, 0.0, 0.0 );
