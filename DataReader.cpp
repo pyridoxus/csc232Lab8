@@ -105,7 +105,8 @@ namespace DataFileReader
 		char temp[256];
 		string s;
 		string t[4];
-		unsigned int i, loc, prevLoc;
+		unsigned int i;
+		unsigned int p[4];
 		DataFileReader::Color c;
 		in.open( colorFileName, ios::in | ios::binary );
 		if(in.is_open())
@@ -113,16 +114,25 @@ namespace DataFileReader
 			while(!in.eof())
 			{
 				in.getline(temp, 256);
-				s.assign(temp);
-				i = prevLoc = 0;
-				loc = s.find_first_of(" ");
-				while((loc != string::npos) && (i < 4))
+				cout << "IN:  " << temp << endl;
+				i = 0;
+				for(int a = 0; a < 256; a++)
 				{
-					t[i] = s.substr(prevLoc, loc - prevLoc);
-					prevLoc = loc + 1;
-					loc = s.find_first_of(" ", prevLoc);
-					i++;
+					if((temp[a] == ' ') && (temp[a + 1] != ' ')) p[i++] = a;
+					if(i == 4) break;
 				}
+				cout << p[0] << ":"<< p[1] << ":" << p[2] << ":" << p[3] << endl;
+				s.assign(temp);
+				cout << "OUT: ";
+				t[0] = s.substr(0, p[0]);
+				cout << t[0] << ":";
+				t[1] = s.substr(p[0] + 1, p[1]);
+				cout << t[1] << ":";
+				t[2] = s.substr(p[1] + 1, p[2]);
+				cout << t[2] << ":";
+				t[3] = s.substr(p[2] + 1, p[3]);
+				cout << t[3];
+				cout << endl;
 				c.r = atof(t[0].c_str());
 				c.g = atof(t[1].c_str());
 				c.b = atof(t[2].c_str());
@@ -131,14 +141,14 @@ namespace DataFileReader
 			}
 			in.close();
 		}
-//		cout.precision(6);
-//		for(unsigned int d = 0; d < this->colors.size(); d++)
-//		{
-//			cout << this->colors[d].r << " ";
-//			cout << this->colors[d].g << " ";
-//			cout << this->colors[d].b << " ";
-//			cout << this->colors[d].a << " " << endl;
-//		}
+		cout.precision(6);
+		for(unsigned int d = 0; d < this->colors.size(); d++)
+		{
+			cout << this->colors[d].r << " ";
+			cout << this->colors[d].g << " ";
+			cout << this->colors[d].b << " ";
+			cout << this->colors[d].a << " " << endl;
+		}
 		return;
 	}
 

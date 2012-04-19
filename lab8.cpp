@@ -20,7 +20,7 @@ int main( int argc, char *argv[] )
 //	colorFileName.append("rainbow.pal");
 
 	string  dataFileName("Elevation.bin");
-	string  colorFileName("rainbow.pal");
+	string  colorFileName("livingston.pal");
 	cout << "Data file: " << dataFileName << endl;
 	cout << "Color file: " << colorFileName << endl;
 //	cout << "Setting up data reader" << endl;
